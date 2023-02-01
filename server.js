@@ -38,34 +38,52 @@ const initialPrompt = () => {
     ]).then(selection => {
       switch (selection.function) {
         case 'View all departments':
-            console.log('you got it')
             viewDepartments();
             break;
         case 'View all roles':
-            internQuestions();
+            viewRoles();
             break;
         case 'View all employees':
-            generateTeam()
+            viewEmployees()
         case 'Add a department':
-            engineerQuestions();
+            addDepartment();
             break;
         case 'Add a role':
-            internQuestions();
+            addRole();
             break;
         case 'Add an employee':
-            generateTeam()
+            addEmployee()
             break;
         case 'Update employee role':
-                generateTeam();
+            updateEmployee();
         }
   })
 };
 
+//View all current departments in Database
+function viewDepartments() {
+    db.query('SELECT * FROM department', function (err, results) {
+    console.table(results);
+  });
+}
 
-// // Query database
-// db.query('SELECT * FROM students', function (err, results) {
-//   console.log(results);
-// });
+//View all current roles in Database
+function viewRoles() {
+    db.query('SELECT * FROM role', function (err, results) {
+    console.table(results);
+  });
+}
+
+//View all current employees in Database
+function viewEmployees() {
+    db.query('SELECT * FROM employee', function (err, results) {
+    console.table(results);
+  });
+}
+
+//Add department to database
+
+
 
 // // Default response for any other request (Not Found)
 // app.use((req, res) => {
