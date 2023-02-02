@@ -1,9 +1,7 @@
 //Dependencies required
 const mysql = require('mysql2');
 const inquirer = require('inquirer')
-
-
-const PORT = process.env.PORT || 3001;
+const cTable = require('console.table')
 
 
 // Connect to database
@@ -64,6 +62,7 @@ const initialPrompt = () => {
 function viewDepartments() {
     db.query('SELECT * FROM department', function (err, results) {
     console.table(results);
+    initialPrompt();
   });
 }
 
@@ -71,6 +70,7 @@ function viewDepartments() {
 function viewRoles() {
     db.query('SELECT * FROM role', function (err, results) {
     console.table(results);
+    initialPrompt();
   });
 }
 
@@ -78,11 +78,55 @@ function viewRoles() {
 function viewEmployees() {
     db.query('SELECT * FROM employee', function (err, results) {
     console.table(results);
+    initialPrompt();
   });
 }
 
 //Add department to database
-function addDepartment
+function addDepartment() {
+  
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What is the department name?',
+  },
+]).then(({name}) => {
+  db.query('INSERT INTO department set ?',{name}, err => {
+    if (err) return console.log(err);
+    initialPrompt();
+  })
+})
+}
+
+//Add roll to database
+async function addRole() {
+  let departments = await db.promise().query('SELECT role.title AS Title, role.salary AS Salary FROM role');
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'role',
+      message: 'What role would you like to add?',
+  },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'What is the salary?',
+  },
+  //   {
+  //     type: 'list',
+  //     name: 'name',
+  //     message: 'What department would you like to add the role too?',
+  //     choices: departments
+  // },
+
+]).then(({name}) => {
+  db.query('INSERT INTO department set ?',{name}, err => {
+    if (err) return console.log(err);
+    initialPrompt();
+  })
+})
+}
 
 
 

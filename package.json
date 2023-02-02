@@ -1,17 +1,26 @@
 {
   "name": "employee-inquiry",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**. Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "console.table": "^0.10.0",
     "express": "^4.16.4",
     "inquirer": "^8.2.4",
     "mysql2": "^2.2.5"
-    
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DomSpadafora/Employee-Inquiry.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/DomSpadafora/Employee-Inquiry/issues"
+  },
+  "homepage": "https://github.com/DomSpadafora/Employee-Inquiry#readme"
 }
