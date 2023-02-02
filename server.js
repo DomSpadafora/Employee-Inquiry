@@ -82,6 +82,7 @@ function viewEmployees() {
 }
 
 //Add department to database
+function addDepartment
 
 
 
