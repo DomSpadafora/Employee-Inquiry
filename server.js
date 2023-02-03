@@ -99,13 +99,14 @@ function addDepartment() {
 })
 }
 
-//Add roll to database
-async function addRole() {
-  let departments = await db.promise().query('SELECT role.title AS Title, role.salary AS Salary FROM role');
+
+//Add new role to database
+function addRole() {
+  db.query('SELECT role.title AS Title, role.salary AS Salary, role.department_id AS Department_id FROM role');
   inquirer.prompt([
     {
       type: 'input',
-      name: 'role',
+      name: 'title',
       message: 'What role would you like to add?',
   },
     {
@@ -113,15 +114,50 @@ async function addRole() {
       name: 'salary',
       message: 'What is the salary?',
   },
-  //   {
-  //     type: 'list',
-  //     name: 'name',
-  //     message: 'What department would you like to add the role too?',
-  //     choices: departments
-  // },
+  {
+    type: 'input',
+    name: 'department_id',
+    message: 'What is the department id?',
+},
 
-]).then(({name}) => {
-  db.query('INSERT INTO department set ?',{name}, err => {
+
+]).then(({title, salary, department_id}) => {
+  db.query('INSERT INTO role set ?',{title, salary, department_id}, err => {
+    if (err) return console.log(err);
+    initialPrompt();
+  })
+})
+}
+
+//Add new employee to database
+function addEmployee() {
+  db.query('SELECT employee.first_name AS First_name, employee.last_name AS Last_name, employee.role_id AS Role_id, employee.manager_id AS Manager_id FROM employee');
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'first_name',
+      message: 'What is their first name?',
+  },
+    {
+      type: 'input',
+      name: 'last_name',
+      message: 'What is there last name?',
+  },
+  {
+    //Do we need a role id since I set it to Auto increment in the schema?
+    type: 'input',
+    name: 'role_id',
+    message: 'What is the role id?',
+  },
+  {
+    type: 'input',
+    name: 'manager_id',
+    message: 'What is there manager id?',
+  },
+
+
+]).then(({first_name, last_name, role_id, manager_id}) => {
+  db.query('INSERT INTO employee set ?',{first_name, last_name, role_id, manager_id}, err => {
     if (err) return console.log(err);
     initialPrompt();
   })
@@ -130,12 +166,4 @@ async function addRole() {
 
 
 
-// // Default response for any other request (Not Found)
-// app.use((req, res) => {
-//   res.status(404).end();
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
 initialPrompt()
