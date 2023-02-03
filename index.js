@@ -20,7 +20,7 @@ const initialPrompt = () => {
   console.log('Welcome to Employee Inquiry!!')
   return inquirer.prompt([
       {
-          type: 'list',
+          type: 'rawlist',
           name: 'function',
           message: 'Please select what you would like to do next',
           choices: [
@@ -94,36 +94,61 @@ function addDepartment() {
 ]).then(({name}) => {
   db.query('INSERT INTO department set ?',{name}, err => {
     if (err) return console.log(err);
+    console.log('New department has been added!')
     initialPrompt();
   })
 })
 }
 
+var managersList = [];
+var departmentList = [];
+// var roleList = [];
 
+function selectDepartment() {
+  db.query('SELECT id, name FROM department', (err, res) => {
+    if (err) throw err
+    for (var i = 0; i < res.length; i++) {
+      departmentList.push(res[i].id);
+    }
+
+  })
+  return departmentList;
+}
+
+function selectManager() {
+  db.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err, res) => {
+    if (err) throw err
+    for (var i = 0; i < res.length; i++) {
+      managersList.push(res[i].first_name);
+    }
+
+  })
+  return managersList;
+}
 //Add new role to database
 function addRole() {
   db.query('SELECT role.title AS Title, role.salary AS Salary, role.department_id AS Department_id FROM role');
-  inquirer.prompt([
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'title',
+        message: 'What role would you like to add?',
+    },
+      {
+        type: 'input',
+        name: 'salary',
+        message: 'What is the salary?',
+    },
     {
-      type: 'input',
-      name: 'title',
-      message: 'What role would you like to add?',
+      type: 'rawlist',
+      name: 'department_id',
+      message: 'What is the department id?',
+      choices: selectDepartment()
   },
-    {
-      type: 'input',
-      name: 'salary',
-      message: 'What is the salary?',
-  },
-  {
-    type: 'input',
-    name: 'department_id',
-    message: 'What is the department id?',
-},
-
-
-]).then(({title, salary, department_id}) => {
+  ]).then(({title, salary, department_id}) => {
   db.query('INSERT INTO role set ?',{title, salary, department_id}, err => {
     if (err) return console.log(err);
+    console.log('New role has been added!')
     initialPrompt();
   })
 })
@@ -152,13 +177,14 @@ function addEmployee() {
   {
     type: 'input',
     name: 'manager_id',
-    message: 'What is there manager id?',
+    message: 'What is their manager id?',
   },
 
 
 ]).then(({first_name, last_name, role_id, manager_id}) => {
   db.query('INSERT INTO employee set ?',{first_name, last_name, role_id, manager_id}, err => {
     if (err) return console.log(err);
+    console.log('Employee has been added!')
     initialPrompt();
   })
 })
