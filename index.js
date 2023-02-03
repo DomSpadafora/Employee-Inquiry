@@ -53,7 +53,7 @@ const initialPrompt = () => {
             addEmployee()
             break;
         case 'Update employee role':
-            updateEmployee();
+            updateEmployeeRole();
         }
   })
 };
@@ -100,10 +100,13 @@ function addDepartment() {
 })
 }
 
+//Adding variable arrays to store current lists in the database
 var managersList = [];
 var departmentList = [];
-// var roleList = [];
+var roleList = [];
 
+
+//Adding functions to use that will show lists in the promt questions
 function selectDepartment() {
   db.query('SELECT id, name FROM department', (err, res) => {
     if (err) throw err
@@ -125,6 +128,18 @@ function selectManager() {
   })
   return managersList;
 }
+
+
+function selectRole() {
+  db.query('SELECT * FROM role', (err, res) => {
+    if (err) throw err
+    for (var i = 0; i < res.length; i++) {
+      roleList.push(res[i].id);
+    }
+  })
+  return departmentList;
+}
+
 //Add new role to database
 function addRole() {
   db.query('SELECT role.title AS Title, role.salary AS Salary, role.department_id AS Department_id FROM role');
@@ -158,6 +173,7 @@ function addRole() {
 function addEmployee() {
   db.query('SELECT employee.first_name AS First_name, employee.last_name AS Last_name, employee.role_id AS Role_id, employee.manager_id AS Manager_id FROM employee');
   inquirer.prompt([
+      //Do we need a role id since I set it to Auto increment in the schema?
     {
       type: 'input',
       name: 'first_name',
@@ -170,18 +186,17 @@ function addEmployee() {
   },
   {
     //Do we need a role id since I set it to Auto increment in the schema?
-    type: 'input',
+    type: 'number',
     name: 'role_id',
-    message: 'What is the role id?',
+    message: 'What is their role id number?',
   },
   {
-    type: 'input',
+    type: 'number',
     name: 'manager_id',
-    message: 'What is their manager id?',
+    message: 'What is their managers id number?',
   },
-
-
-]).then(({first_name, last_name, role_id, manager_id}) => {
+])
+.then(({first_name, last_name, role_id, manager_id}) => {
   db.query('INSERT INTO employee set ?',{first_name, last_name, role_id, manager_id}, err => {
     if (err) return console.log(err);
     console.log('Employee has been added!')
@@ -189,6 +204,35 @@ function addEmployee() {
   })
 })
 }
+
+function updateEmployeeRole() {
+  inquirer.prompt([
+      {
+          name: "first_name",
+          type: "input",
+          message: "Please enter the first name of the employee you want update in the database."
+      },
+      {
+          name: "role_id",
+          type: "number",
+          message: "Please enter the new role number id associated with the employee you want to update in the database. Enter ONLY numbers."
+      }
+  ]).then(function (response) {
+      db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.first_name], function (err, data) {
+          if (err) throw err;
+          console.log('The new role entered has been added successfully to the database.');
+
+          db.query(`SELECT * FROM employee`, (err, result) => {
+              if (err) {
+                  res.status(500).json({ error: err.message })
+                  startPrompt();
+              }
+              console.table(result);
+              startPrompt();
+          });
+      })
+});
+};
 
 
 
