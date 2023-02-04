@@ -116,28 +116,28 @@ function selectDepartment() {
   })
   return departmentList;
 }
+////////still working on how to get these function added to prompt choices for certain questions
+// function selectManager() {
+//   db.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err, res) => {
+//     if (err) throw err
+//     for (var i = 0; i < res.length; i++) {
+//       managersList.push(res[i].first_name);
+//     }
 
-function selectManager() {
-  db.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err, res) => {
-    if (err) throw err
-    for (var i = 0; i < res.length; i++) {
-      managersList.push(res[i].first_name);
-    }
-
-  })
-  return managersList;
-}
+//   })
+//   return managersList;
+// }
 
 
-function selectRole() {
-  db.query('SELECT * FROM role', (err, res) => {
-    if (err) throw err
-    for (var i = 0; i < res.length; i++) {
-      roleList.push(res[i].id);
-    }
-  })
-  return departmentList;
-}
+// function selectRole() {
+//   db.query('SELECT * FROM role', (err, res) => {
+//     if (err) throw err
+//     for (var i = 0; i < res.length; i++) {
+//       roleList.push(res[i].id);
+//     }
+//   })
+//   return departmentList;
+// }
 
 //Add new role to database
 function addRole() {
