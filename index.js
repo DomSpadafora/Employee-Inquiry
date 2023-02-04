@@ -84,7 +84,6 @@ function viewEmployees() {
 
 //Add department to database
 function addDepartment() {
-  
   inquirer.prompt([
     {
       type: 'input',
@@ -206,6 +205,7 @@ function addEmployee() {
 }
 
 function updateEmployeeRole() {
+  // db.query('SELECT employee.first_name AS First_name, employee.role_id AS Role_id, role.department_id FROM employee');
   inquirer.prompt([
       {
           name: "first_name",
@@ -217,18 +217,18 @@ function updateEmployeeRole() {
           type: "number",
           message: "Please enter the new role number id associated with the employee you want to update in the database. Enter ONLY numbers."
       }
-  ]).then(function (response) {
-      db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.first_name], function (err, data) {
+  ]).then( (response) => {
+      db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.first_name],  (err, data) => {
           if (err) throw err;
           console.log('The new role entered has been added successfully to the database.');
 
           db.query(`SELECT * FROM employee`, (err, result) => {
               if (err) {
                   res.status(500).json({ error: err.message })
-                  startPrompt();
+                  initialPrompt();
               }
               console.table(result);
-              startPrompt();
+              initialPrompt();
           });
       })
 });
