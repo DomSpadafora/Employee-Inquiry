@@ -21,6 +21,9 @@
   Please node index.js in the command terminal to begin the initial prompt. From there you will be guided through the app by questions. 
   [Video Demonstration](https://drive.google.com/file/d/1nXjVJkudRZRvboI3mvXMvwgKLepi0th9/view)
 
+  
+  ![Video Demonstration](./images/Capture.PNG)
+
   ## License 
   This project is licensed under the MIT license.
 
